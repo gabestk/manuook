@@ -1,0 +1,23 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+pubspec.lock
+
+# Pastas de plataforma geradas pelo "flutter create" no GitHub Actions
+android/
+ios/
+linux/
+macos/
+windows/
+web/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
