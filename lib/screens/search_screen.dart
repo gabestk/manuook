@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../services/book_api.dart';
 import '../services/book_store.dart';
-import '../theme.dart';
 import '../widgets/cover.dart';
 import 'book_edit_screen.dart';
 
@@ -110,21 +109,22 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _body() {
     if (!_searched && !_loading) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(32),
+          padding: const EdgeInsets.all(32),
           child: Text(
             'Digite o nome do livro. A busca usa o Google Books e a Open Library.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.textDim),
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
         ),
       );
     }
     if (_searched && _results.isEmpty && !_loading) {
-      return const Center(
+      return Center(
         child: Text('Nada encontrado. Tente outro termo ou adicione manualmente.',
-            textAlign: TextAlign.center, style: TextStyle(color: AppColors.textDim)),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
       );
     }
     return ListView.separated(
@@ -158,15 +158,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         Text(r.author,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: AppColors.textDim)),
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
                       Text(
                         [if (r.year != null) r.year!, r.source].join(' · '),
-                        style: const TextStyle(fontSize: 11, color: AppColors.textDim),
+                        style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.add_circle_outline_rounded, color: AppColors.gold),
+                Icon(Icons.add_circle_outline_rounded, color: Theme.of(context).colorScheme.primary),
               ],
             ),
           ),

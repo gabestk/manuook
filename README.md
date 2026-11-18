@@ -2,7 +2,7 @@
   <img src="assets/icon/icon.png" width="120" alt="Ícone do manuook">
 </p>
 
-<h1 align="center">manuook</h1>
+<h1 align="center">Manuook</h1>
 
 <p align="center">
   Sua estante pessoal com todos os livros que você já leu: capa, título e a sua nota.
@@ -13,14 +13,17 @@
 ## O que o app faz
 
 - **Busca de livros com capa**: digite o título, o autor ou o ISBN e escolha o livro. A capa, o título e o autor vêm preenchidos.
-- **Nota de 0 a 5 estrelas, com meia estrela**: toque na metade esquerda de uma estrela para dar meia (1,5, 4,5...) ou arraste o dedo.
+- **Nota de 0 a 5 estrelas, de 0,1 em 0,1**: use o controle deslizante ou os botões **−** / **+**. As estrelas se preenchem na fração exata (ex.: 3,7).
 - **5 estrelas especial**: quando o livro recebe 5 estrelas, aparece a opção *5 estrelas especial*. As estrelas ficam **azuis** e a capa ganha um brilho azul na estante.
 - **Organização por período**:
   - livros lidos até 2026 ficam todos juntos em **"Lidos antes de 2027"**
   - a partir de **2027**, cada livro fica no **mês** em que foi lido (ex.: *Março de 2027*)
 - **Resumo no topo**: total de livros, nota média e quantidade de especiais (a partir de 2027 mostra também quantos livros você leu no ano).
 - **Ordenação**: mais recentes, maior nota ou título.
-- **Backup**: no menu (⋮), *Copiar backup* copia todos os livros como texto e *Importar backup* restaura. Serve também para levar os livros para a versão iOS.
+- **Configurações** (ícone de engrenagem):
+  - modo **Claro**, **Noturno** ou igual ao **Sistema**
+  - **cor do app** entre 12 opções (padrão: verde escuro)
+- **Backup**: nas Configurações, *Copiar backup* copia todos os livros como texto e *Importar backup* restaura. Serve também para levar os livros para a versão iOS.
 - **Adicionar manualmente**: se o livro não aparecer na busca, dá para cadastrar à mão e colar o link de uma capa.
 
 Os dados ficam salvos no próprio celular.
@@ -51,17 +54,19 @@ O APK é sempre assinado com a mesma chave (`keystore/manuook.jks`), então as v
 ```
 lib/
 ├── main.dart                  # ponto de entrada
-├── theme.dart                 # cores e tema escuro
+├── theme.dart                 # tema (claro/noturno) a partir da cor escolhida
 ├── models/book.dart           # modelo do livro (nota, especial, mês de leitura)
 ├── services/
 │   ├── book_api.dart          # Google Books + Open Library
-│   └── book_store.dart        # armazenamento local e backup
+│   ├── book_store.dart        # armazenamento local e backup
+│   └── app_settings.dart      # tema claro/noturno e cor do app
 ├── screens/
 │   ├── home_screen.dart       # estante separada por mês
 │   ├── search_screen.dart     # busca de livros
-│   └── book_edit_screen.dart  # nota, estrelas e mês de leitura
+│   ├── book_edit_screen.dart  # nota, estrelas e mês de leitura
+│   └── settings_screen.dart   # configurações
 └── widgets/
-    ├── stars.dart             # estrelas (com meia e azul especial)
+    ├── stars.dart             # estrelas fracionadas (0,1) e azul especial
     └── cover.dart             # capa com cache
 ```
 

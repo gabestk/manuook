@@ -169,36 +169,13 @@ class _BookEditScreenState extends State<BookEditScreen> {
           const SizedBox(height: 28),
           const Text('Sua nota',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 4),
-          const Text('Toque na metade da estrela para dar meia estrela.',
-              style: TextStyle(fontSize: 12, color: AppColors.textDim)),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              StarRatingInput(
-                value: b.rating,
-                special: b.isSpecial,
-                onChanged: _setRating,
-                size: 46,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                formatRating(b.rating),
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: b.isSpecial ? AppColors.specialBlue : AppColors.gold,
-                ),
-              ),
-            ],
+          StarRatingInput(
+            value: b.rating,
+            special: b.isSpecial,
+            onChanged: _setRating,
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              onPressed: b.rating == 0 ? null : () => _setRating(0),
-              child: const Text('Zerar nota'),
-            ),
-          ),
+          const SizedBox(height: 8),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
             child: b.rating >= 5 ? _specialToggle() : const SizedBox.shrink(),
@@ -274,10 +251,15 @@ class _BookEditScreenState extends State<BookEditScreen> {
     return Container(
       margin: const EdgeInsets.only(top: 4),
       decoration: BoxDecoration(
-        color: on ? const Color(0x223FA9F5) : AppColors.surface,
+        color: on
+            ? const Color(0x223FA9F5)
+            : Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-            color: on ? AppColors.specialBlue : AppColors.surfaceHigh, width: 1.5),
+            color: on
+                ? AppColors.specialBlue
+                : Theme.of(context).colorScheme.surfaceContainerHighest,
+            width: 1.5),
       ),
       child: SwitchListTile(
         value: on,
@@ -286,7 +268,7 @@ class _BookEditScreenState extends State<BookEditScreen> {
         secondary: const Icon(Icons.auto_awesome_rounded, color: AppColors.specialBlue),
         title: const Text('5 estrelas especial',
             style: TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: const Text('Para os favoritos da vida. As estrelas ficam azuis.'),
+        subtitle: const Text('Para os favoritos da vida.'),
       ),
     );
   }

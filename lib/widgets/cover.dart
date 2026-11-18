@@ -20,8 +20,9 @@ class BookCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final placeholder = Container(
-      color: AppColors.surfaceHigh,
+      color: scheme.surfaceContainerHighest,
       padding: const EdgeInsets.all(8),
       alignment: Alignment.center,
       child: Text(
@@ -29,8 +30,8 @@ class BookCover extends StatelessWidget {
         textAlign: TextAlign.center,
         maxLines: 5,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: AppColors.textDim,
+        style: TextStyle(
+          color: scheme.onSurfaceVariant,
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
@@ -40,12 +41,10 @@ class BookCover extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        border: glow
-            ? Border.all(color: AppColors.specialBlue, width: 2)
-            : null,
+        border: glow ? Border.all(color: AppColors.specialBlue, width: 2) : null,
         boxShadow: [
           BoxShadow(
-            color: glow ? const Color(0x883FA9F5) : const Color(0x66000000),
+            color: glow ? const Color(0x883FA9F5) : const Color(0x40000000),
             blurRadius: glow ? 14 : 8,
             offset: const Offset(0, 3),
           ),

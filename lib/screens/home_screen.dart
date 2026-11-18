@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../models/book.dart';
+import '../services/app_settings.dart';
 import '../services/book_store.dart';
 import '../theme.dart';
 import '../widgets/cover.dart';
 import '../widgets/stars.dart';
 import 'book_edit_screen.dart';
 import 'search_screen.dart';
+import 'settings_screen.dart';
 
 enum SortMode { recent, rating, title }
 
 class HomeScreen extends StatefulWidget {
   final BookStore store;
-  const HomeScreen({super.key, required this.store});
+  final AppSettings settings;
+  const HomeScreen({super.key, required this.store, required this.settings});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -50,44 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
   }
 
-  Future<void> _export() async {
-    await Clipboard.setData(ClipboardData(text: widget.store.exportJson()));
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Backup copiado. Cole num lugar seguro (e-mail, notas...).'),
+  Future<void> _openSettings() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => SettingsScreen(settings: widget.settings, store: widget.store),
     ));
-  }
-
-  Future<void> _import() async {
-    final ctrl = TextEditingController();
-    final text = await showDialog<String>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Importar backup'),
-        content: TextField(
-          controller: ctrl,
-          maxLines: 6,
-          decoration: const InputDecoration(hintText: 'Cole aqui o texto do backup'),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancelar')),
-          FilledButton(
-              onPressed: () => Navigator.pop(ctx, ctrl.text),
-              child: const Text('Importar')),
-        ],
-      ),
-    );
-    if (text == null || text.trim().isEmpty || !mounted) return;
-    try {
-      final n = await widget.store.importJson(text);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('$n livros importados.')));
-    } catch (_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Esse texto não é um backup válido.')));
-    }
   }
 
   @override
@@ -98,8 +66,19 @@ class _HomeScreenState extends State<HomeScreen> {
         final books = widget.store.books;
         return Scaffold(
           appBar: AppBar(
-            title: const Text('manuook',
-                style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.5)),
+            titleSpacing: 16,
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(9),
+                  child: Image.asset('assets/icon/icon.png', width: 34, height: 34),
+                ),
+                const SizedBox(width: 10),
+                const Text('Manuook',
+                    style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3)),
+              ],
+            ),
             actions: [
               PopupMenuButton<SortMode>(
                 tooltip: 'Ordenar',
@@ -112,13 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   PopupMenuItem(value: SortMode.title, child: Text('Título (A-Z)')),
                 ],
               ),
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert_rounded),
-                onSelected: (v) => v == 'export' ? _export() : _import(),
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: 'export', child: Text('Copiar backup')),
-                  PopupMenuItem(value: 'import', child: Text('Importar backup')),
-                ],
+              IconButton(
+                tooltip: 'Configurações',
+                onPressed: _openSettings,
+                icon: const Icon(Icons.settings_rounded),
               ),
             ],
           ),
@@ -140,15 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.auto_stories_rounded, size: 72, color: AppColors.gold),
+            Icon(Icons.auto_stories_rounded, size: 72, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
             const Text('Sua estante está vazia',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Adicione os livros que você já leu. Busque pelo título e a capa vem junto.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textDim),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
@@ -208,10 +184,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: color ?? AppColors.text)),
+                      color: color ?? Theme.of(context).colorScheme.onSurface)),
               const SizedBox(height: 2),
               Text(label,
-                  style: const TextStyle(fontSize: 12, color: AppColors.textDim)),
+                  style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.onSurfaceVariant)),
             ],
           ),
         );
@@ -220,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -240,13 +216,13 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: AppColors.gold),
+            Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8),
             Expanded(
               child: Text(title,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
             ),
-            Text('$count', style: const TextStyle(color: AppColors.textDim)),
+            Text('$count', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           ],
         ),
       ),
