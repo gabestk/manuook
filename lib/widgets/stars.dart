@@ -116,7 +116,6 @@ class StarRatingInput extends StatelessWidget {
                   activeTrackColor: accent,
                   thumbColor: accent,
                   overlayColor: accent.withAlpha(40),
-                  showValueIndicator: ShowValueIndicator.always,
                 ),
                 child: Slider(
                   value: value.clamp(0.0, 5.0),

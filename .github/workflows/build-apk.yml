@@ -36,6 +36,11 @@ jobs:
 
       - run: flutter pub get
 
+      - name: Analisar código
+        run: |
+          flutter analyze --no-fatal-infos --no-fatal-warnings > analyze.txt 2>&1 || {
+            grep -E "error" analyze.txt | sed 's/^/::error::/' ; exit 1; }
+
       - name: Testes
         run: flutter test
 
