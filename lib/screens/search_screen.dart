@@ -109,18 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _body() {
-    if (!_searched && !_loading) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Text(
-            'Digite o nome do livro. A busca usa o Google Books e a Open Library.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-          ),
-        ),
-      );
-    }
+    if (!_searched && !_loading) return const SizedBox.shrink();
     if (_searched && _results.isEmpty && !_loading) {
       return Center(
         child: Text('Nada encontrado. Tente outro termo ou adicione manualmente.',

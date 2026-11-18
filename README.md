@@ -40,15 +40,28 @@ O app usa duas APIs públicas e gratuitas, sem precisar de chave:
 
 As duas são consultadas ao mesmo tempo e os resultados repetidos são juntados.
 
-## Baixar o APK
+## Baixar e instalar
 
-Cada push no `main` gera um APK pelo GitHub Actions:
+Cada push no `main` gera, pelo GitHub Actions, o APK do Android e o IPA do iPhone. Os dois ficam na aba **[Releases](../../releases)**.
 
-1. Abra a aba **[Releases](../../releases)** do repositório.
-2. Baixe o `manuook.apk` da versão mais recente.
-3. No Android, permita a instalação de fontes desconhecidas e instale.
+### Android
+
+1. Baixe o `manuook.apk` da versão mais recente.
+2. Permita a instalação de fontes desconhecidas e instale.
 
 O APK é sempre assinado com a mesma chave (`keystore/manuook.jks`), então as versões novas instalam **por cima** da antiga sem apagar seus livros.
+
+### iPhone (iOS 13 ou superior, inclui iPhone 11 e mais novos)
+
+O `manuook.ipa` sai **sem assinatura da Apple**, porque o app não está na App Store. Para instalar, ele precisa ser assinado com o seu Apple ID por um programa de *sideload* (instalação fora da App Store):
+
+1. Baixe o `manuook.ipa` no computador.
+2. Instale o **[Sideloadly](https://sideloadly.io)** (Windows ou Mac) e conecte o iPhone por cabo.
+3. Arraste o `.ipa` para o Sideloadly, entre com o seu Apple ID e clique em **Start**.
+4. No iPhone: **Ajustes > Geral > VPN e Gerenciamento de Dispositivo**, confie no seu Apple ID.
+5. A partir do iOS 16, ative o **Modo de Desenvolvedor** em **Ajustes > Privacidade e Segurança**.
+
+Com um Apple ID gratuito, a assinatura vale **7 dias**: depois disso é só reinstalar pelo Sideloadly (os livros continuam salvos). Com a conta paga de desenvolvedor da Apple, vale 1 ano. O **[AltStore](https://altstore.io)** é uma alternativa que renova a assinatura sozinho pelo Wi-Fi.
 
 ## Estrutura do projeto
 
@@ -71,7 +84,7 @@ lib/
     └── cover.dart             # capa com cache
 ```
 
-A pasta `android/` não fica no repositório: ela é gerada pelo `flutter create` no GitHub Actions.
+As pastas `android/` e `ios/` não ficam no repositório: elas são geradas pelo `flutter create` no GitHub Actions.
 
 ## Rodar localmente
 
@@ -86,7 +99,7 @@ flutter run
 
 ## Próximos passos
 
-- [ ] Versão iOS
+- [x] Versão iOS
 
 ## Tecnologias
 

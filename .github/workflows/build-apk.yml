@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Android e iOS
 
 on:
   push:
@@ -63,10 +63,75 @@ jobs:
           name: manuook-apk
           path: manuook.apk
 
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Gerar a pasta ios
+        run: |
+          flutter create --org com.gabestk --project-name manuook --platforms=ios .
+          rm -f test/widget_test.dart
+          PLIST=ios/Runner/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Manuook" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string Manuook" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName Manuook" "$PLIST"
+          # iOS 13 ou superior (iPhone 6s em diante, incluindo o iPhone 11)
+          if [ -f ios/Podfile ]; then
+            sed -i '' "s/^# *platform :ios.*/platform :ios, '13.0'/" ios/Podfile
+            grep -n "platform :ios" ios/Podfile || true
+          fi
+          # Ícone também no iOS
+          python3 - <<'PY'
+          s = open('pubspec.yaml').read()
+          s = s.replace('  android: true', '  android: false').replace('  ios: false', '  ios: true\n  remove_alpha_ios: true')
+          open('pubspec.yaml', 'w').write(s)
+          PY
+          sed -n '/flutter_launcher_icons:/,$p' pubspec.yaml
+
+      - run: flutter pub get
+
+      - name: Ícone do app
+        run: dart run flutter_launcher_icons
+
+      - name: Compilar para iPhone (sem assinatura)
+        run: flutter build ios --release --no-codesign --build-number=${{ github.run_number }}
+
+      - name: Empacotar o .ipa
+        run: |
+          mkdir -p Payload
+          cp -R build/ios/iphoneos/Runner.app Payload/
+          zip -qry manuook.ipa Payload
+          ls -lh manuook.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manuook-ipa
+          path: manuook.ipa
+
+  release:
+    needs: [android, ios]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
       - name: Publicar release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
-          name: manuook 1.0.${{ github.run_number }}
-          files: manuook.apk
-          body: APK gerado automaticamente a partir do commit ${{ github.sha }}.
+          name: Manuook 1.0.${{ github.run_number }}
+          files: |
+            manuook.apk
+            manuook.ipa
+          body: |
+            - **manuook.apk**: Android
+            - **manuook.ipa**: iPhone (iOS 13 ou superior). Instale com o Sideloadly ou o AltStore, veja o README.
+
+            Gerado a partir do commit ${{ github.sha }}.
