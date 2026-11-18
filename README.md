@@ -13,7 +13,8 @@
 ## O que o app faz
 
 - **Busca de livros com capa**: digite o título, o autor ou o ISBN e escolha o livro. A capa, o título e o autor vêm preenchidos.
-- **Nota de 0 a 5 estrelas, de 0,1 em 0,1**: use o controle deslizante ou os botões **−** / **+**. As estrelas se preenchem na fração exata (ex.: 3,7).
+- **Nota de 0 a 5 estrelas, de 0,1 em 0,1**: toque ou deslize o dedo sobre as estrelas. Elas se preenchem na fração exata (ex.: 3,7).
+- **Capas rápidas**: as capas ficam guardadas no celular e são carregadas já no tamanho da tela, então a estante abre com elas prontas, mesmo sem internet.
 - **5 estrelas especial**: quando o livro recebe 5 estrelas, aparece a opção *5 estrelas especial*. As estrelas ficam **azuis** e a capa ganha um brilho azul na estante.
 - **Organização por período**:
   - livros lidos até 2026 ficam todos juntos em **"Lidos antes de 2027"**

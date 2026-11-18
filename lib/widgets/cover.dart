@@ -54,14 +54,24 @@ class BookCover extends StatelessWidget {
         borderRadius: BorderRadius.circular(glow ? radius - 2 : radius),
         child: (url == null || url!.isEmpty)
             ? placeholder
-            : CachedNetworkImage(
+            : LayoutBuilder(builder: (context, c) {
+                // Decodifica a imagem já no tamanho em que ela aparece,
+                // o que deixa a estante bem mais leve e rápida.
+                final dpr = MediaQuery.devicePixelRatioOf(context);
+                final w = c.maxWidth.isFinite ? (c.maxWidth * dpr).round() : null;
+                return CachedNetworkImage(
                 imageUrl: url!,
+                memCacheWidth: w,
+                fadeInDuration: const Duration(milliseconds: 120),
+                fadeOutDuration: Duration.zero,
+                placeholderFadeInDuration: Duration.zero,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
                 placeholder: (_, __) => placeholder,
                 errorWidget: (_, __, ___) => placeholder,
-              ),
+              );
+              }),
       ),
     );
   }

@@ -56,7 +56,8 @@ class _SearchScreenState extends State<SearchScreen> {
       id: Book.newId(),
       title: r?.title ?? _ctrl.text.trim(),
       author: r?.author ?? '',
-      coverUrl: r?.coverUrl,
+      // Na lista usa a capa média (rápida); no livro salvo, a grande.
+      coverUrl: r?.coverUrl?.replaceFirst(RegExp(r'-M\.jpg$'), '-L.jpg'),
       readYear: monthly ? now.year : null,
       readMonth: monthly ? now.month : null,
     );

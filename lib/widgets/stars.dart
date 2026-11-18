@@ -67,8 +67,8 @@ class _FractionClipper extends CustomClipper<Rect> {
   bool shouldReclip(_FractionClipper old) => old.fraction != fraction;
 }
 
-/// Entrada da nota: estrelas grandes, controle deslizante de 0,1 em 0,1
-/// e botões de - / + para ajuste fino.
+/// Entrada da nota só com estrelas: toque ou deslize o dedo sobre elas.
+/// A nota anda de 0,1 em 0,1, acompanhando o ponto exato do dedo.
 class StarRatingInput extends StatelessWidget {
   final double value;
   final bool special;
@@ -81,59 +81,41 @@ class StarRatingInput extends StatelessWidget {
     this.special = false,
   });
 
-  void _set(double v) {
-    final r = (v * 10).round() / 10;
-    onChanged(r.clamp(0.0, 5.0));
-  }
-
   @override
   Widget build(BuildContext context) {
     final accent = special ? AppColors.specialBlue : AppColors.gold;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            StarRow(rating: value, special: special, size: 44),
-            const Spacer(),
-            Text(
-              formatRating(value),
-              style: TextStyle(
-                  fontSize: 26, fontWeight: FontWeight.w800, color: accent),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            IconButton.filledTonal(
-              onPressed: value > 0 ? () => _set(value - 0.1) : null,
-              icon: const Icon(Icons.remove_rounded),
-            ),
-            Expanded(
-              child: SliderTheme(
-                data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: accent,
-                  thumbColor: accent,
-                  overlayColor: accent.withAlpha(40),
-                ),
-                child: Slider(
-                  value: value.clamp(0.0, 5.0),
-                  min: 0,
-                  max: 5,
-                  divisions: 50,
-                  label: formatRating(value),
-                  onChanged: _set,
-                ),
-              ),
-            ),
-            IconButton.filledTonal(
-              onPressed: value < 5 ? () => _set(value + 0.1) : null,
-              icon: const Icon(Icons.add_rounded),
-            ),
-          ],
-        ),
-      ],
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      // As estrelas ocupam a largura disponível (menos o número da nota),
+      // assim cada 0,1 corresponde a um bom pedaço de tela.
+      final size = ((constraints.maxWidth - 76) / 5).clamp(36.0, 72.0);
+
+      void update(double dx) {
+        const pad = 0.08;
+        final i = (dx / size).floor().clamp(0, 4);
+        final inside = (dx - i * size) / size;
+        final frac = ((inside - pad) / (1 - 2 * pad)).clamp(0.0, 1.0);
+        final r = ((i + frac) * 10).round() / 10;
+        final v = r.clamp(0.0, 5.0);
+        if (v != value) onChanged(v);
+      }
+
+      return Row(
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapDown: (d) => update(d.localPosition.dx),
+            onHorizontalDragStart: (d) => update(d.localPosition.dx),
+            onHorizontalDragUpdate: (d) => update(d.localPosition.dx),
+            child: StarRow(rating: value, special: special, size: size),
+          ),
+          const Spacer(),
+          Text(
+            formatRating(value),
+            style: TextStyle(
+                fontSize: 26, fontWeight: FontWeight.w800, color: accent),
+          ),
+        ],
+      );
+    });
   }
 }

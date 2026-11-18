@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/book.dart';
@@ -26,6 +27,26 @@ class BookStore extends ChangeNotifier {
       }
     }
     notifyListeners();
+    prefetchCovers();
+  }
+
+  /// Baixa para o cache do aparelho as capas que ainda não estão lá,
+  /// para a estante abrir com as capas prontas (inclusive sem internet).
+  Future<void> prefetchCovers() async {
+    final cache = DefaultCacheManager();
+    for (final b in List<Book>.from(_books)) {
+      final url = b.coverUrl;
+      if (url == null || url.isEmpty) continue;
+      try {
+        final hit = await cache.getFileFromCache(url);
+        if (hit == null) await cache.downloadFile(url);
+      } catch (_) {}
+    }
+  }
+
+  void _prefetch(String? url) {
+    if (url == null || url.isEmpty) return;
+    DefaultCacheManager().downloadFile(url).then((_) {}, onError: (_) {});
   }
 
   Future<void> _save() async {
@@ -40,6 +61,7 @@ class BookStore extends ChangeNotifier {
     } else {
       _books.add(book);
     }
+    _prefetch(book.coverUrl);
     notifyListeners();
     await _save();
   }

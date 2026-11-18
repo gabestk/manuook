@@ -64,7 +64,8 @@ class BookApi {
         if (cover != null) {
           cover = cover
               .replaceFirst('http://', 'https://')
-              .replaceAll('&edge=curl', '');
+              .replaceAll('&edge=curl', '')
+              .replaceAll('zoom=5', 'zoom=1');
         }
         final authors = (v['authors'] as List<dynamic>?)?.join(', ') ?? '';
         final date = v['publishedDate']?.toString();
@@ -99,7 +100,7 @@ class BookApi {
           title: (m['title'] ?? '').toString(),
           author: (m['author_name'] as List<dynamic>?)?.join(', ') ?? '',
           coverUrl: coverId != null
-              ? 'https://covers.openlibrary.org/b/id/$coverId-L.jpg'
+              ? 'https://covers.openlibrary.org/b/id/$coverId-M.jpg'
               : null,
           year: m['first_publish_year']?.toString(),
           source: 'Open Library',
