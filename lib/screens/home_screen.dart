@@ -120,12 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 16),
             const Text('Sua estante está vazia',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 8),
-            Text(
-              'Adicione os livros que você já leu. Busque pelo título e a capa vem junto.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-            ),
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: _openAdd,
@@ -159,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (legacy.isNotEmpty) {
       _sortList(legacy);
-      slivers.add(_header('Lidos antes de $kFirstMonthlyYear', legacy.length,
+      slivers.add(_header('Livros lidos', legacy.length,
           Icons.history_edu_rounded));
       slivers.add(_grid(legacy));
     }

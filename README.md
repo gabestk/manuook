@@ -17,7 +17,7 @@
 - **Capas rápidas**: as capas ficam guardadas no celular e são carregadas já no tamanho da tela, então a estante abre com elas prontas, mesmo sem internet.
 - **5 estrelas especial**: quando o livro recebe 5 estrelas, aparece a opção *5 estrelas especial*. As estrelas ficam **azuis** e a capa ganha um brilho azul na estante.
 - **Organização por período**:
-  - livros lidos até 2026 ficam todos juntos em **"Lidos antes de 2027"**
+  - livros lidos até 2026 ficam todos juntos em **"Livros lidos"**
   - a partir de **2027**, cada livro fica no **mês** em que foi lido (ex.: *Março de 2027*)
 - **Resumo no topo**: total de livros, nota média e quantidade de especiais (a partir de 2027 mostra também quantos livros você leu no ano).
 - **Ordenação**: mais recentes, maior nota ou título.
