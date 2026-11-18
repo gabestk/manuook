@@ -12,9 +12,9 @@ jobs:
   android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -27,6 +27,7 @@ jobs:
       - name: Gerar a pasta android
         run: |
           flutter create --org com.gabestk --project-name manuook --platforms=android .
+          rm -f test/widget_test.dart
           MANIFEST=android/app/src/main/AndroidManifest.xml
           grep -q 'android.permission.INTERNET' "$MANIFEST" || \
             sed -i 's#<manifest xmlns:android="http://schemas.android.com/apk/res/android">#&\n    <uses-permission android:name="android.permission.INTERNET"/>#' "$MANIFEST"
