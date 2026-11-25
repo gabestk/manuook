@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,6 +34,7 @@ class BookStore extends ChangeNotifier {
   /// Baixa para o cache do aparelho as capas que ainda não estão lá,
   /// para a estante abrir com as capas prontas (inclusive sem internet).
   Future<void> prefetchCovers() async {
+    if (kIsWeb) return; // no navegador o próprio Safari guarda as imagens
     final cache = DefaultCacheManager();
     for (final b in List<Book>.from(_books)) {
       final url = b.coverUrl;
@@ -45,7 +47,7 @@ class BookStore extends ChangeNotifier {
   }
 
   void _prefetch(String? url) {
-    if (url == null || url.isEmpty) return;
+    if (kIsWeb || url == null || url.isEmpty) return;
     DefaultCacheManager().downloadFile(url).then((_) {}, onError: (_) {});
   }
 

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
@@ -54,7 +55,20 @@ class BookCover extends StatelessWidget {
         borderRadius: BorderRadius.circular(glow ? radius - 2 : radius),
         child: (url == null || url!.isEmpty)
             ? placeholder
-            : LayoutBuilder(builder: (context, c) {
+            : kIsWeb
+                ? Image.network(
+                    url!,
+                    // Usa <img> do navegador: as capas do Google Books não
+                    // permitem leitura direta (CORS) pelo site.
+                    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    loadingBuilder: (_, child, progress) =>
+                        progress == null ? child : placeholder,
+                    errorBuilder: (_, __, ___) => placeholder,
+                  )
+                : LayoutBuilder(builder: (context, c) {
                 // Decodifica a imagem já no tamanho em que ela aparece,
                 // o que deixa a estante bem mais leve e rápida.
                 final dpr = MediaQuery.devicePixelRatioOf(context);

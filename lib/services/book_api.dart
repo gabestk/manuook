@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 
 class BookResult {
@@ -24,7 +25,9 @@ class BookResult {
 /// Busca livros no Google Books e na Open Library ao mesmo tempo.
 /// Nenhuma das duas precisa de chave de API.
 class BookApi {
-  static const _headers = {'User-Agent': 'manuook/1.0 (github.com/gabestk/manuook)'};
+  // No navegador o User-Agent não pode ser alterado, então só é enviado no app.
+  static Map<String, String> get _headers =>
+      kIsWeb ? const {} : const {'User-Agent': 'manuook/1.0 (github.com/gabestk/manuook)'};
   static const _timeout = Duration(seconds: 12);
 
   static Future<List<BookResult>> search(String query) async {

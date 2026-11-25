@@ -115,6 +115,53 @@ jobs:
           name: manuook-ipa
           path: manuook.ipa
 
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Gerar a pasta web
+        run: |
+          flutter create --org com.gabestk --project-name manuook --platforms=web .
+          rm -f test/widget_test.dart
+          # Ícone do ManuOOK também na versão web (tela inicial do iPhone)
+          python3 - <<'PY'
+          s = open('pubspec.yaml').read()
+          s = s.replace('  android: true', '  android: false')
+          s += '  web:\n    generate: true\n    image_path: "assets/icon/icon.png"\n    background_color: "#141826"\n    theme_color: "#141826"\n'
+          open('pubspec.yaml', 'w').write(s)
+          PY
+          sed -n '/flutter_launcher_icons:/,$p' pubspec.yaml
+
+      - run: flutter pub get
+
+      - name: Ícone do app
+        run: dart run flutter_launcher_icons
+
+      - name: Nome ManuOOK no site e na tela inicial
+        run: |
+          sed -i 's/manuook/ManuOOK/g' web/index.html web/manifest.json
+          grep -n 'ManuOOK\|apple' web/index.html web/manifest.json
+
+      - name: Compilar versão web
+        run: flutter build web --release
+
+      - name: Publicar no branch web
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: web
+          publish_dir: build/web
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Versão web do ManuOOK'
+
   release:
     needs: [android, ios]
     runs-on: ubuntu-latest
