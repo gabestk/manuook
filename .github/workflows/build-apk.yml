@@ -146,6 +146,7 @@ jobs:
       - name: Nome ManuOOK no site e na tela inicial
         run: |
           sed -i 's/manuook/ManuOOK/g' web/index.html web/manifest.json
+          sed -i 's/A new Flutter project./ManuOOK - sua estante pessoal de livros lidos./' web/index.html web/manifest.json
           grep -n 'ManuOOK\|apple' web/index.html web/manifest.json
 
       - name: Compilar versão web
