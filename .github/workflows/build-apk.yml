@@ -150,7 +150,7 @@ jobs:
           grep -n 'ManuOOK\|apple' web/index.html web/manifest.json
 
       - name: Compilar versão web
-        run: flutter build web --release
+        run: flutter build web --release --base-href /manuook/
 
       - name: Publicar no branch web
         uses: peaceiris/actions-gh-pages@v4

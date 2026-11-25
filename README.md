@@ -42,7 +42,7 @@ As duas são consultadas ao mesmo tempo e os resultados repetidos são juntados.
 
 ## Baixar e instalar
 
-Cada push no `main` gera, pelo GitHub Actions, o APK do Android e o IPA do iPhone (os dois ficam na aba **[Releases](../../releases)**) e também a versão web, publicada no branch `web`.
+Cada push no `main` gera, pelo GitHub Actions, o APK do Android e o IPA do iPhone (os dois ficam na aba **[Releases](../../releases)**) e também a versão web, publicada no GitHub Pages.
 
 ### Android
 
@@ -53,15 +53,15 @@ O APK é sempre assinado com a mesma chave (`keystore/manuook.jks`), então as v
 
 ### iPhone pela versão web (gratuito e sem prazo de validade)
 
-A versão web é o próprio ManuOOK compilado para o navegador. Ela fica no branch `web`, que o Netlify publica como site. No iPhone:
+A versão web é o próprio ManuOOK compilado para o navegador. Ela fica no branch `web` e é publicada pelo GitHub Pages em **https://gabestk.github.io/manuook/**. No iPhone:
 
-1. Abra o endereço do site no **Safari**.
+1. Abra **https://gabestk.github.io/manuook/** no **Safari**.
 2. Toque em **Compartilhar** (o quadrado com a seta) e depois em **Adicionar à Tela de Início**.
 3. O ícone do ManuOOK aparece na tela inicial e abre em tela cheia, como um app.
 
 Os livros ficam salvos no próprio iPhone, dentro desse atalho. Para não correr o risco de perdê-los, use de vez em quando o **backup** nas configurações e cole o texto num lugar seguro. Também dá para importar no site um backup feito no app Android, e vice-versa.
 
-**Configuração do Netlify (só uma vez):** em *Add new site > Import an existing project*, escolha o GitHub e o repositório `manuook`, mude o *Branch to deploy* para `web`, deixe o *Build command* e o *Publish directory* vazios e clique em *Deploy*. A partir daí, cada push no `main` atualiza o site sozinho.
+Cada push no `main` atualiza o site sozinho.
 
 ### iPhone pelo IPA (iOS 13 ou superior, inclui iPhone 11 e mais novos)
 
