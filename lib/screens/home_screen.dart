@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Image.asset('assets/icon/icon.png', width: 34, height: 34),
                 ),
                 const SizedBox(width: 10),
-                const Text('Manuook',
+                const Text('ManuOOK',
                     style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3)),
               ],
             ),

@@ -31,7 +31,7 @@ jobs:
           MANIFEST=android/app/src/main/AndroidManifest.xml
           grep -q 'android.permission.INTERNET' "$MANIFEST" || \
             sed -i 's#<manifest xmlns:android="http://schemas.android.com/apk/res/android">#&\n    <uses-permission android:name="android.permission.INTERNET"/>#' "$MANIFEST"
-          sed -i 's#android:label="[^"]*"#android:label="Manuook"#' "$MANIFEST"
+          sed -i 's#android:label="[^"]*"#android:label="ManuOOK"#' "$MANIFEST"
           grep -n 'INTERNET\|label' "$MANIFEST"
 
       - run: flutter pub get
@@ -79,9 +79,9 @@ jobs:
           flutter create --org com.gabestk --project-name manuook --platforms=ios .
           rm -f test/widget_test.dart
           PLIST=ios/Runner/Info.plist
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName Manuook" "$PLIST" || \
-            /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string Manuook" "$PLIST"
-          /usr/libexec/PlistBuddy -c "Set :CFBundleName Manuook" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ManuOOK" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string ManuOOK" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName ManuOOK" "$PLIST"
           # iOS 13 ou superior (iPhone 6s em diante, incluindo o iPhone 11)
           if [ -f ios/Podfile ]; then
             sed -i '' "s/^# *platform :ios.*/platform :ios, '13.0'/" ios/Podfile
@@ -127,7 +127,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
-          name: Manuook 1.0.${{ github.run_number }}
+          name: ManuOOK 1.0.${{ github.run_number }}
           files: |
             manuook.apk
             manuook.ipa

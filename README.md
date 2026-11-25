@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/icon/icon.png" width="120" alt="Ícone do manuook">
+  <img src="assets/icon/icon.png" width="120" alt="Ícone do ManuOOK">
 </p>
 
-<h1 align="center">Manuook</h1>
+<h1 align="center">ManuOOK</h1>
 
 <p align="center">
   Sua estante pessoal com todos os livros que você já leu: capa, título e a sua nota.
